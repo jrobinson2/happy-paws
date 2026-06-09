@@ -1,6 +1,34 @@
 /**
  * Configure Tailwind v4 in this file using CSS variables and directives:
  * https://tailwindcss.com/docs/v4-beta#css-first-configuration
+ *
+ * Happy Paws design tokens are ported here from the design handoff
+ * (`design_handoff_happy_paws/prototypes/hp-core.css` `:root`). They are
+ * exposed both as Tailwind theme tokens (so utilities like `bg-cream`,
+ * `text-ink`, `font-serif` generate) and as plain CSS custom properties for
+ * the design-system stylesheet in `happypaws.css`.
+ *
+ * Note: the legacy token names `--lime`/`--lime-deep` are the brand AMBER
+ * (#FFA800); ported here as `accent`/`accent-deep`.
  */
 
 @import 'tailwindcss';
+
+@theme {
+  /* Colors */
+  --color-cream: #fffdf7;
+  --color-cream-2: #f1ebdc;
+  --color-paper: #fffcf4;
+  --color-ink: #1a1613;
+  --color-ink-2: #3a332c;
+  --color-olive: #23271b;
+  --color-olive-2: #2c3122;
+  --color-accent: #ffa800;
+  --color-accent-deep: #d98a00;
+  --color-clay: #c25a35;
+
+  /* Type families */
+  --font-serif: 'Bricolage Grotesque', 'Archivo', sans-serif;
+  --font-sans: 'Archivo', system-ui, sans-serif;
+  --font-mono: 'Space Mono', ui-monospace, monospace;
+}

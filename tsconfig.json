@@ -31,7 +31,9 @@
       "vite/client"
     ],
     "paths": {
-      "~/*": ["./app/*"]
+      "~/*": ["./app/*"],
+      "storefrontapi.generated": ["./storefrontapi.generated.d.ts"],
+      "customer-accountapi.generated": ["./customer-accountapi.generated.d.ts"]
     },
     "noEmit": true,
     "rootDirs": [".", "./.react-router/types"],
