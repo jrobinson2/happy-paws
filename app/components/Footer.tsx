@@ -1,129 +1,71 @@
-import {Suspense} from 'react';
-import {Await, NavLink} from 'react-router';
-import type {FooterQuery, HeaderQuery} from 'storefrontapi.generated';
+import {Link} from 'react-router';
 
-interface FooterProps {
-  footer: Promise<FooterQuery | null>;
-  header: HeaderQuery;
-  publicStoreDomain: string;
-}
+const FOOT_COLUMNS = [
+  {
+    heading: 'Shop',
+    links: [
+      {title: 'All candles', to: '/#shop'},
+      {title: 'Best sellers', to: '/#shop'},
+      {title: 'The gift set', to: '/#shop'},
+      {title: 'Refills', to: '/#shop'},
+    ],
+  },
+  {
+    heading: 'About',
+    links: [
+      {title: 'Our story', to: '/#story'},
+      {title: 'Pet-safe pledge', to: '/#creds'},
+      {title: 'The intervention', to: '/#roast'},
+      {title: 'Brian', to: '/#story'},
+    ],
+  },
+  {
+    heading: 'Help',
+    links: [
+      {title: 'Shipping', to: '/policies/shipping-policy'},
+      {title: 'Returns', to: '/policies/refund-policy'},
+      {title: 'Contact', to: '/pages/contact'},
+      {title: 'FAQ', to: '/pages/faq'},
+    ],
+  },
+];
 
-export function Footer({
-  footer: footerPromise,
-  header,
-  publicStoreDomain,
-}: FooterProps) {
+export function Footer() {
   return (
-    <Suspense>
-      <Await resolve={footerPromise}>
-        {(footer) => (
-          <footer className="footer">
-            {footer?.menu && header.shop.primaryDomain?.url && (
-              <FooterMenu
-                menu={footer.menu}
-                primaryDomainUrl={header.shop.primaryDomain.url}
-                publicStoreDomain={publicStoreDomain}
-              />
-            )}
-          </footer>
-        )}
-      </Await>
-    </Suspense>
+    <footer className="hp-footer" data-dark>
+      <div className="wrap">
+        <div className="foot-top">
+          <div className="foot-brand">
+            <div className="logo">Happy Paws</div>
+            <p>
+              Pet-safe fragrance for people who treat their pet like a person.
+              Composed seriously. Genuinely non-toxic.
+            </p>
+          </div>
+          {FOOT_COLUMNS.map((col) => (
+            <div className="foot-col" key={col.heading}>
+              <h4>{col.heading}</h4>
+              {col.links.map((link) => (
+                <Link
+                  key={`${link.title}-${link.to}`}
+                  to={link.to}
+                  prefetch="intent"
+                >
+                  {link.title}
+                </Link>
+              ))}
+            </div>
+          ))}
+        </div>
+        <div className="giant">HAPPY PAWS</div>
+        <div className="foot-bot">
+          <span className="mono">
+            © 2026 Happy Paws Fragrance Co. · Made for pets, sold to their
+            people.
+          </span>
+          <span className="mono">Non-toxic · Cruelty-free · Brian-approved</span>
+        </div>
+      </div>
+    </footer>
   );
-}
-
-function FooterMenu({
-  menu,
-  primaryDomainUrl,
-  publicStoreDomain,
-}: {
-  menu: FooterQuery['menu'];
-  primaryDomainUrl: FooterProps['header']['shop']['primaryDomain']['url'];
-  publicStoreDomain: string;
-}) {
-  return (
-    <nav className="footer-menu" role="navigation">
-      {(menu || FALLBACK_FOOTER_MENU).items.map((item) => {
-        if (!item.url) return null;
-        // if the url is internal, we strip the domain
-        const url =
-          item.url.includes('myshopify.com') ||
-          item.url.includes(publicStoreDomain) ||
-          item.url.includes(primaryDomainUrl)
-            ? new URL(item.url).pathname
-            : item.url;
-        const isExternal = !url.startsWith('/');
-        return isExternal ? (
-          <a href={url} key={item.id} rel="noopener noreferrer" target="_blank">
-            {item.title}
-          </a>
-        ) : (
-          <NavLink
-            end
-            key={item.id}
-            prefetch="intent"
-            style={activeLinkStyle}
-            to={url}
-          >
-            {item.title}
-          </NavLink>
-        );
-      })}
-    </nav>
-  );
-}
-
-const FALLBACK_FOOTER_MENU = {
-  id: 'gid://shopify/Menu/199655620664',
-  items: [
-    {
-      id: 'gid://shopify/MenuItem/461633060920',
-      resourceId: 'gid://shopify/ShopPolicy/23358046264',
-      tags: [],
-      title: 'Privacy Policy',
-      type: 'SHOP_POLICY',
-      url: '/policies/privacy-policy',
-      items: [],
-    },
-    {
-      id: 'gid://shopify/MenuItem/461633093688',
-      resourceId: 'gid://shopify/ShopPolicy/23358013496',
-      tags: [],
-      title: 'Refund Policy',
-      type: 'SHOP_POLICY',
-      url: '/policies/refund-policy',
-      items: [],
-    },
-    {
-      id: 'gid://shopify/MenuItem/461633126456',
-      resourceId: 'gid://shopify/ShopPolicy/23358111800',
-      tags: [],
-      title: 'Shipping Policy',
-      type: 'SHOP_POLICY',
-      url: '/policies/shipping-policy',
-      items: [],
-    },
-    {
-      id: 'gid://shopify/MenuItem/461633159224',
-      resourceId: 'gid://shopify/ShopPolicy/23358079032',
-      tags: [],
-      title: 'Terms of Service',
-      type: 'SHOP_POLICY',
-      url: '/policies/terms-of-service',
-      items: [],
-    },
-  ],
-};
-
-function activeLinkStyle({
-  isActive,
-  isPending,
-}: {
-  isActive: boolean;
-  isPending: boolean;
-}) {
-  return {
-    fontWeight: isActive ? 'bold' : undefined,
-    color: isPending ? 'grey' : 'white',
-  };
 }

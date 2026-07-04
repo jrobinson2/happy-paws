@@ -32,6 +32,8 @@ export default [
       '**/*.generated.d.ts',
       '**/.react-router/',
       '**/packages/hydrogen/dist/',
+      // Design handoff reference package — not part of the app source.
+      'design_handoff_happy_paws/',
     ],
   },
   ...fixupConfigRules(
